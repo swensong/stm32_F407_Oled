@@ -7,6 +7,7 @@
 
 /*Include--------------------------------------*/
 #include "TIM.h"
+#include "usart.h"
 
 
 /************************************************/
@@ -17,6 +18,8 @@
 /*					CCR2_Val--设置占空比								*/
 /*	输  出：无																	*/
 /************************************************/
+
+u16 cnt = 0;
 
 //void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
 void TIM3_Init(u16 arr, u16 psc)
@@ -181,4 +184,44 @@ void TIM4_Init(u16 arr, u16 psc)
     TIM_ARRPreloadConfig(TIM4,ENABLE);
 
     TIM_Cmd(TIM4, ENABLE);
+}
+
+void TIM2_Init(u16 arr, u16 psc)
+{
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);   //TIM3
+
+    TIM_TimeBaseStructure.TIM_Prescaler=psc;  
+    TIM_TimeBaseStructure.TIM_Period=arr;                       
+    TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
+    TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
+
+    TIM_TimeBaseInit(TIM2,&TIM_TimeBaseStructure);                  
+
+    TIM_ITConfig( TIM2 ,TIM_IT_Update, ENABLE );
+
+    TIM_Cmd(TIM2, ENABLE);
+
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//串口1中断通道
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority =2;		//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
+
+}
+
+void TIM2_IRQHandler()
+{
+
+    if ( TIM_GetITStatus( TIM2, TIM_IT_Update) != RESET )
+    {
+        if ( ++cnt > 50 )
+        {
+            cnt = 0;
+            USART1_Write_String( "in interrupt!\r\n" , sizeof( "in interrupt!\r\n" ) );
+        }
+    }
+    TIM_ClearITPendingBit( TIM2, TIM_IT_Update );
 }
