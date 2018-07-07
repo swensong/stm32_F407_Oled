@@ -26,11 +26,15 @@ int main(void)
 	/*TIM3_PWM初始化*/
 //  TIM3_Init(10000, 84, 6000, 5000 ); //定时器频率84M / 84 = 1M， 计数100次为100μs，即10KHz，40 / 100 = 40%占空比   
     TIM3_Init( 10000, 84 );
+    TIM4_Init( 20000, 84 );
 	/*loop-------------------------------------*/
     TIM_SetCompare1( TIM3, 1000);
     TIM_SetCompare2( TIM3, 2000);
     TIM_SetCompare3( TIM3, 3000);
     TIM_SetCompare4( TIM3, 4000);
+
+    // 测量出来的值 900 向前， 1025左转， 775 右转
+    TIM_SetCompare3( TIM4, 900 );
 
     while (1)
     {
