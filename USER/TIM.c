@@ -18,8 +18,59 @@
 /*	输  出：无																	*/
 /************************************************/
 
-void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
+//void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
+void TIM3_Init(u16 arr, u16 psc)
 {
+    GPIO_InitTypeDef GPIO_InitStructure;
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    TIM_OCInitTypeDef  TIM_OCInitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);   //TIM3
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE); 
+
+    GPIO_PinAFConfig(GPIOB,GPIO_PinSource0,GPIO_AF_TIM3); //GPIOB?
+    GPIO_PinAFConfig(GPIOB,GPIO_PinSource1,GPIO_AF_TIM3); //GPIOB?
+    GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_TIM3); //GPIOB?′
+    GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_TIM3); //GPIOB?
+
+    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5;  //GPIOB
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        //
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      //
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        //
+    GPIO_Init(GPIOB,&GPIO_InitStructure);               //
+     
+    TIM_TimeBaseStructure.TIM_Prescaler=psc;  
+    TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
+    TIM_TimeBaseStructure.TIM_Period=arr;                       
+    TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
+
+    TIM_TimeBaseInit(TIM3,&TIM_TimeBaseStructure);                  
+
+
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; 
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; 
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+	TIM_OCInitStructure.TIM_Pulse = 6000;//设置占空比
+
+    TIM_OC1Init(TIM3, &TIM_OCInitStructure); 
+    TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
+
+    TIM_OC2Init(TIM3, &TIM_OCInitStructure); 
+    TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable); 
+
+
+    TIM_OC3Init(TIM3, &TIM_OCInitStructure); 
+    TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);  
+
+
+    TIM_OC4Init(TIM3, &TIM_OCInitStructure);  
+    TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);  
+       
+    TIM_ARRPreloadConfig(TIM3,ENABLE);
+
+    TIM_Cmd(TIM3, ENABLE);
+    /*
 	GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
@@ -33,10 +84,10 @@ void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
     //这个函数每次只能对应初始化一个IO口
     GPIO_PinAFConfig(GPIOA,GPIO_PinSource6 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
 	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
-//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource8 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
-//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource8 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9 ,GPIO_AF_TIM3); //GPIOA7复用为定时器3
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 ;           //GPIOA7
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 ;           //GPIOA7
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        //复用功能
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	//速度100MHz
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      //推挽复用输出
@@ -69,7 +120,26 @@ void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
 
 	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR2上的预装载寄存器
 
+	//初始化TIM3 Channel3 PWM模式	 
+//	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM3; //选择定时器模式:TIM脉冲宽度调制模式3
+	TIM_OCInitStructure.TIM_Pulse = CCR2_Val;//设置占空比
+ 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //比较输出使能
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low; //输出极性:TIM输出比较极性低
+	TIM_OC3Init(TIM3, &TIM_OCInitStructure);  //根据T指定的参数初始化外设TIM3 OC3
+
+	TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR3上的预装载寄存器
+
+	//初始化TIM3 Channel4 PWM模式	 
+//	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM4; //选择定时器模式:TIM脉冲宽度调制模式4
+	TIM_OCInitStructure.TIM_Pulse = CCR2_Val;//设置占空比
+ 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //比较输出使能
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low; //输出极性:TIM输出比较极性低
+	TIM_OC4Init(TIM3, &TIM_OCInitStructure);  //根据T指定的参数初始化外设TIM3 OC4
+
+	TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR4上的预装载寄存器
+
 	TIM_ARRPreloadConfig(TIM3,ENABLE);//ARPE使能 
  
 	TIM_Cmd(TIM3, ENABLE);  //使能TIM3
+    */
 }
