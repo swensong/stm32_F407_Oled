@@ -51,7 +51,7 @@ void TIM3_Init(u16 arr, u16 psc)
     TIM_TimeBaseInit(TIM3,&TIM_TimeBaseStructure);                  
 
 
-    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; 
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2; 
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; 
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
 	TIM_OCInitStructure.TIM_Pulse = 6000;//设置占空比
@@ -275,3 +275,67 @@ u8 actuator_control( u8 direction, u32 number )
 
     return 1;
 }
+
+/* 0 =< speed =< 9999 */
+// 控制左侧电机
+u8 Motor_Left_Control( u8 direction, u32 speed )
+{
+
+
+    if ( speed > 9999 )
+    {
+        USART1_Write_String( "number1 error\r\n", sizeof("number1 error\r\n") );
+        return -1;
+    }
+
+    if ( direction == FORWARD )
+    {
+        TIM_SetCompare1( TIM3, speed);
+        TIM_SetCompare2( TIM3, 0);
+    }
+    else if ( direction == BACK )
+    {
+        TIM_SetCompare1( TIM3, 0);
+        TIM_SetCompare2( TIM3, speed);
+    }
+    else
+    {
+        USART1_Write_String( "direction error\r\n", sizeof("direction error\r\n") );
+    }
+}
+
+/* 0 =< speed =< 9999 */
+// 控制右侧电机
+u8 Motor_Right_Control( u8 direction, u32 speed )
+{
+
+
+    if ( speed > 9999 )
+    {
+        USART1_Write_String( "number1 error\r\n", sizeof("number1 error\r\n") );
+        return -1;
+    }
+
+    if ( direction == FORWARD )
+    {
+        TIM_SetCompare3( TIM3, 0);
+        TIM_SetCompare4( TIM3, speed);
+    }
+    else if ( direction == BACK )
+    {
+        TIM_SetCompare3( TIM3, speed);
+        TIM_SetCompare4( TIM3, 0);
+    }
+    else
+    {
+        USART1_Write_String( "direction error\r\n", sizeof("direction error\r\n") );
+    }
+}
+
+// 直线控制电机前转或者右转
+u8 Motor_Control( u8 direction, u32 speed )
+{
+    Motor_Right_Control( direction, speed );
+    Motor_Left_Control( direction, speed );
+}
+

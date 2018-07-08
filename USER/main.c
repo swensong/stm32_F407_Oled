@@ -26,6 +26,7 @@ int main(void)
 {
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_2 );
 
+    /* 舵机控制初始化 */
     TIM2_Init( 1000, 84 );
 	/*TIM3_PWM初始化*/
     TIM3_Init( 10000, 84 );
@@ -34,13 +35,14 @@ int main(void)
     USART1_Config( 115200 );
 
 	/*loop-------------------------------------*/
-    TIM_SetCompare1( TIM3, 1000);
-    TIM_SetCompare2( TIM3, 2000);
-    TIM_SetCompare3( TIM3, 3000);
-    TIM_SetCompare4( TIM3, 4000);
+    TIM_SetCompare1( TIM3, 0);
+    TIM_SetCompare2( TIM3, 0);
+    TIM_SetCompare3( TIM3, 0);
+    TIM_SetCompare4( TIM3, 0);
 
     USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
-    actuator_control( LEFT, 123);
+    actuator_control( LEFT, 0 );
+
 
     while (1)
     {

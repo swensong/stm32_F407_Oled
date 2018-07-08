@@ -192,31 +192,37 @@ void USART1_Action( u8 *buf, u8 len )
         USART1_Write_String( "AT  -=" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        Motor_Left_Control( FORWARD, data_buf );
         break;
     case 3:
         USART1_Write_String( "AT  +=" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        Motor_Right_Control( FORWARD, data_buf );
         break;
     case 4:
         USART1_Write_String( "up   =" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        Motor_Control( FORWARD , data_buf );
         break;
     case 5:
         USART1_Write_String( "down =" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        Motor_Control( BACK , data_buf );
         break;
     case 6:
         USART1_Write_String( "left =" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        actuator_control( LEFT, data_buf );
         break;
     case 7:
         USART1_Write_String( "right=" , 6 );
         USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
+        actuator_control( RIGHT, data_buf );
         break;
     default:
 	    USART1_Write_String( "error\r\n" , 7 );
