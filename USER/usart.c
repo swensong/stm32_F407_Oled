@@ -138,34 +138,33 @@ u8 Cmp_Memory( u8 *ptr1, u8 *ptr2, u8 len )
 void USART1_Action( u8 *buf, u8 len )
 {
     u8 i = 0;
-//    u8 j = 0;
+    u8 j = 0;
 
-//    u16 data_buf = 0;
+    u16 data_buf = 0;    // 用于得到接收到的数据
+
     u8 cmd0[] = "11";
     u8 cmd1[] = "22";
-    u8 cmd2[] = "AT-=";
-    u8 cmd3[] = "AT+=";
-//    u8 send_buf[ 20 ];
+    u8 cmd2[] = "AT  -=";
+    u8 cmd3[] = "AT  +=";
+    u8 cmd4[] = "up   =";
+    u8 cmd5[] = "down =";
+    u8 cmd6[] = "left =";
+    u8 cmd7[] = "right=";
+    u8 send_buf[ 20 ];
 
     u8 cmd_len[] = {
-        sizeof(cmd0) - 1, sizeof(cmd1) - 1,  sizeof(cmd2) - 1, sizeof(cmd3) - 1,
+        sizeof(cmd0) - 1, sizeof(cmd1) - 1,  sizeof(cmd2) - 1, sizeof(cmd3) - 1, sizeof(cmd4) - 1, sizeof(cmd5) - 1,  sizeof(cmd6) - 1, sizeof(cmd7) - 1,
     };
     u8 *cmd_ptr[] = {
-        &cmd0[0], &cmd1[0], &cmd2[0], &cmd3[0],
+        &cmd0[0], &cmd1[0], &cmd2[0], &cmd3[0], &cmd4[0], &cmd5[0], &cmd6[0], &cmd7[0],
     };
 
-    /*
-    for ( i = 4, j = 0; i < len; i++, j++ )
+    for ( i = 6, j = 0; i < len; i++, j++ )
     {
         send_buf[j] = *(buf + i);
     }
 
-	USART1_Write_String( "\r\n" , 2 );
-    USART1_Write_String( send_buf, 2 );
-    USART1_Write_String( "\r\n" , sizeof("\r\n") );
-	
-	data_buf = (send_buf[0]) + (send_buf[1] * 256);
-    */
+	data_buf = (send_buf[0] - '0')*10 + (send_buf[1] - '0');
 
     for ( i = 0; i < sizeof(cmd_len); i++ )
     {
@@ -181,18 +180,45 @@ void USART1_Action( u8 *buf, u8 len )
     switch(i)
     {
     case 0:
-        USART1_Write_String( "11\r\n" , 4 );
+        USART1_Write_String( "11" , 2 );
+	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 1:
-        USART1_Write_String( "22\r\n" , 4 );
+        USART1_Write_String( "22" , 2 );
+	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 2:
-        USART1_Write_String( "AT-=\r\n" , 6 );
+        USART1_Write_String( "AT  -=" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 3:
-        USART1_Write_String( "AT+=\r\n" , 6 );
+        USART1_Write_String( "AT  +=" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
+        break;
+    case 4:
+        USART1_Write_String( "up   =" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
+        break;
+    case 5:
+        USART1_Write_String( "down =" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
+        break;
+    case 6:
+        USART1_Write_String( "left =" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
+        break;
+    case 7:
+        USART1_Write_String( "right=" , 6 );
+        USART1_Write_String( send_buf, 2 );
+	    USART1_Write_String( "\r\n" , 2 );
         break;
     default:
+	    USART1_Write_String( "error\r\n" , 7 );
         break;
     }
 }

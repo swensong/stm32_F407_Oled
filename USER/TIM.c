@@ -217,7 +217,8 @@ void TIM2_IRQHandler()
 
     if ( TIM_GetITStatus( TIM2, TIM_IT_Update) != RESET )
     {
-        if ( ++cnt > 50 )
+        USART1_Rx_Monitor( 1 );
+        if ( ++cnt > 1000 )
         {
             cnt = 0;
             USART1_Write_String( "in interrupt!\r\n" , sizeof( "in interrupt!\r\n" ) );

@@ -26,7 +26,7 @@ int main(void)
 {
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_2 );
 
-    TIM2_Init( 10000, 84 );
+    TIM2_Init( 1000, 84 );
 	/*TIM3_PWM≥ı ºªØ*/
     TIM3_Init( 10000, 84 );
     TIM4_Init( 20000, 84 );
