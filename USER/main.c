@@ -39,10 +39,8 @@ int main(void)
     TIM_SetCompare3( TIM3, 3000);
     TIM_SetCompare4( TIM3, 4000);
 
-    // 测量出来的值 900 向前， 1025左转， 775 右转
-    TIM_SetCompare3( TIM4, 900 );
-
     USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
+    actuator_control( LEFT, 123);
 
     while (1)
     {

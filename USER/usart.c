@@ -1,4 +1,5 @@
 #include "usart.h"
+#include "TIM.h"
 
 #define RESERVE_MAX     1024*50
 
@@ -164,7 +165,7 @@ void USART1_Action( u8 *buf, u8 len )
         send_buf[j] = *(buf + i);
     }
 
-	data_buf = (send_buf[0] - '0')*10 + (send_buf[1] - '0');
+	data_buf = (send_buf[0] - '0')*1000 + (send_buf[1] - '0')*100 + (send_buf[2] - '0')*10 + (send_buf[3] - '0');
 
     for ( i = 0; i < sizeof(cmd_len); i++ )
     {
@@ -189,32 +190,32 @@ void USART1_Action( u8 *buf, u8 len )
         break;
     case 2:
         USART1_Write_String( "AT  -=" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 3:
         USART1_Write_String( "AT  +=" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 4:
         USART1_Write_String( "up   =" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 5:
         USART1_Write_String( "down =" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 6:
         USART1_Write_String( "left =" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     case 7:
         USART1_Write_String( "right=" , 6 );
-        USART1_Write_String( send_buf, 2 );
+        USART1_Write_String( send_buf, 4 );
 	    USART1_Write_String( "\r\n" , 2 );
         break;
     default:

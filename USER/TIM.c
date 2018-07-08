@@ -209,7 +209,6 @@ void TIM2_Init(u16 arr, u16 psc)
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority =2;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
-
 }
 
 void TIM2_IRQHandler()
@@ -225,4 +224,54 @@ void TIM2_IRQHandler()
         }
     }
     TIM_ClearITPendingBit( TIM2, TIM_IT_Update );
+}
+
+//  0 < number < 125
+u8 actuator_control( u8 direction, u32 number )
+{
+    u8 number_flag = 0;
+    u8 buf[4];
+
+    if ( number > 125 )
+    {
+        USART1_Write_String( "bad number1\r\n", sizeof("bad number1\r\n") );
+        return -1;
+    }
+
+    if ( direction == LEFT )
+    {
+        number_flag = 1;
+        number = 900 + number;
+    }
+    else if (direction == RIGHT)
+    {
+        number_flag = 1;
+        number = 900 - number;
+    }
+    else
+    {
+        USART1_Write_String( "bad number2\r\n", sizeof("bad number2\r\n") );
+        return -1;
+    }
+
+    buf[0] = number / 1000 + '0';
+    buf[1] = number / 100 % 10 + '0';
+    buf[2] = number / 10 % 10 + '0';
+    buf[3] = number % 10 + '0';
+    buf[4] = '\0';
+
+    USART1_Write_String( buf, 4 );
+    USART1_Write_String( "\r\n", sizeof("\r\n") );
+    
+    // 测量出来的值 900 向前， 1025左转， 775 右转
+    if ( number_flag == 1 )
+    {
+        TIM_SetCompare3( TIM4, number );
+    }
+    else
+    {
+        USART1_Write_String( "unsafe data!/r/n", sizeof("unsafe data!/r/n") );
+    }
+
+    return 1;
 }
