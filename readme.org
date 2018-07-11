@@ -1,0 +1,11 @@
+文件目标生成索引文件，
+完成时间：  2018/7/7/15/06
+
+* TIM3->TIM5
+| TIM3_CHx | TIM5_CHx | GPIOB_Pin_x | GPIOA_Pin_x |
+| TIM3_CH3 | TIM5_CH1 | PB0         | PA0         |
+| TIM3_CH4 | TIM5_CH2 | PB1         | PA1         |
+| TIM3_CH1 | TIM5_CH3 | PB4         | PA2         |
+| TIM3_CH2 | TIM5_CH4 | PB5         | PA3         |
+
+

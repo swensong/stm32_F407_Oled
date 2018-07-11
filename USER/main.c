@@ -29,7 +29,7 @@ int main(void)
     /* 舵机控制初始化 */
     TIM2_Init( 1000, 84 );
 	/*TIM3_PWM初始化*/
-    TIM3_Init( 10000, 84 );
+    TIM5_Init( 10000, 84 );
     TIM4_Init( 20000, 84 );
 
     USART1_Config( 115200 );
@@ -42,6 +42,8 @@ int main(void)
 
     USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
     actuator_control( LEFT, 0 );
+    //Motor_Control( BACK, 8000 );
+	Motor_Control( FORWARD, 2000 );
 
 
     while (1)
