@@ -73,16 +73,16 @@ void TIM5_Init(u16 arr, u16 psc)
     TIM_Cmd(TIM5, ENABLE);
 }
 
-void TIM4_Init(u16 arr, u16 psc)
+void TIM10_Init(u16 arr, u16 psc)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
     TIM_OCInitTypeDef  TIM_OCInitStructure;
 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4,ENABLE);   //TIM3
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM10,ENABLE);
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE); 
 
-    GPIO_PinAFConfig(GPIOB,GPIO_PinSource8,GPIO_AF_TIM4); //GPIOB?
+    GPIO_PinAFConfig(GPIOB,GPIO_PinSource8,GPIO_AF_TIM10); //GPIOB?
 
     GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_8;  //GPIOB
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        //
@@ -96,20 +96,20 @@ void TIM4_Init(u16 arr, u16 psc)
     TIM_TimeBaseStructure.TIM_Period=arr;                       
     TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
 
-    TIM_TimeBaseInit(TIM4,&TIM_TimeBaseStructure);                  
+    TIM_TimeBaseInit(TIM10,&TIM_TimeBaseStructure);                  
 
 
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2; 
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; 
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
-	TIM_OCInitStructure.TIM_Pulse = 6000;//设置占空比
+    TIM_OCInitStructure.TIM_Pulse = 6000;//设置占空比
 
-    TIM_OC3Init(TIM4, &TIM_OCInitStructure); 
-    TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);
+    TIM_OC1Init(TIM10, &TIM_OCInitStructure); 
+    TIM_OC1PreloadConfig(TIM10, TIM_OCPreload_Enable);
 
-    TIM_ARRPreloadConfig(TIM4,ENABLE);
+    TIM_ARRPreloadConfig(TIM10,ENABLE);
 
-    TIM_Cmd(TIM4, ENABLE);
+    TIM_Cmd(TIM10, ENABLE);
 }
 
 void TIM2_Init(u16 arr, u16 psc)
@@ -176,7 +176,7 @@ u8 actuator_control( u8 direction, u32 number )
     // 测量出来的值 900 向前， 1025左转， 775 右转
     if ( number_flag == 1 )
     {
-        TIM_SetCompare3( TIM4, number );
+        TIM_SetCompare1( TIM10, number );
     }
     else
     {
@@ -200,13 +200,13 @@ u8 Motor_Left_Control( u8 direction, u32 speed )
 
     if ( direction == FORWARD )
     {
-        TIM_SetCompare1( TIM3, speed);
-        TIM_SetCompare2( TIM3, 0);
+        TIM_SetCompare1( TIM5, speed);
+        TIM_SetCompare2( TIM5, 0);
     }
     else if ( direction == BACK )
     {
-        TIM_SetCompare1( TIM3, 0);
-        TIM_SetCompare2( TIM3, speed);
+        TIM_SetCompare1( TIM5, 0);
+        TIM_SetCompare2( TIM5, speed);
     }
     else
     {
@@ -230,13 +230,13 @@ u8 Motor_Right_Control( u8 direction, u32 speed )
 
     if ( direction == FORWARD )
     {
-        TIM_SetCompare3( TIM3, 0);
-        TIM_SetCompare4( TIM3, speed);
+        TIM_SetCompare3( TIM5, 0);
+        TIM_SetCompare4( TIM5, speed);
     }
     else if ( direction == BACK )
     {
-        TIM_SetCompare3( TIM3, speed);
-        TIM_SetCompare4( TIM3, 0);
+        TIM_SetCompare3( TIM5, speed);
+        TIM_SetCompare4( TIM5, 0);
     }
     else
     {

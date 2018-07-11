@@ -30,18 +30,24 @@ int main(void)
     TIM2_Init( 1000, 84 );
 	/*TIM3_PWM≥ı ºªØ*/
     TIM5_Init( 10000, 84 );
-    TIM4_Init( 20000, 84 );
+    TIM10_Init( 40000, 84 );
 
     USART1_Config( 115200 );
 
 	/*loop-------------------------------------*/
-    TIM_SetCompare1( TIM3, 0);
-    TIM_SetCompare2( TIM3, 0);
-    TIM_SetCompare3( TIM3, 0);
-    TIM_SetCompare4( TIM3, 0);
+    TIM_SetCompare1( TIM5, 1000);
+    TIM_SetCompare2( TIM5, 2000);
+    TIM_SetCompare3( TIM5, 3000);
+    TIM_SetCompare4( TIM5, 4000);
+
+    TIM_SetCompare1( TIM10, 3000 );
+//    TIM_SetCompare1( TIM10, 5000 );
+//    TIM_SetCompare1( TIM10, 775 );
+//    TIM_SetCompare1( TIM10, 1025 );
 
     USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
-    actuator_control( LEFT, 0 );
+    //actuator_control( LEFT, 125 );
+    //actuator_control( RIGHT, 125 );
     //Motor_Control( BACK, 8000 );
 	Motor_Control( FORWARD, 2000 );
 
