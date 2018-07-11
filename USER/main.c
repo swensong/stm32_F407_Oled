@@ -41,7 +41,7 @@ int main(void)
     TIM_SetCompare4( TIM3, 0);
 
     USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
-    actuator_control( LEFT, 0 );
+    actuator_control( RIGHT, 125 );
 
 
     while (1)
