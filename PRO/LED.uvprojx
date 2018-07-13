@@ -609,6 +609,11 @@
               <FileType>1</FileType>
               <FilePath>..\USER\DataScope_DP.C</FilePath>
             </File>
+            <File>
+              <FileName>test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

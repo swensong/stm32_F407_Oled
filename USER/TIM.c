@@ -10,6 +10,7 @@
 #include "usart.h"
 #include "sin.h"
 #include "DataScope_DP.h"
+#include "oled.h"
 
 
 /************************************************/
@@ -22,6 +23,7 @@
 /************************************************/
 
 u16 cnt = 0;
+extern __IO uint32_t Frequency1;
 
 //void TIM3_Init(u16 arr, u16 psc, u16 CCR1_Val, u16 CCR2_Val)
 void TIM5_Init(u16 arr, u16 psc)
@@ -142,6 +144,7 @@ void TIM2_Init(u16 arr, u16 psc)
 void TIM2_IRQHandler()
 {
     static u16 cnt = 0;
+	static u16 cnt1 = 0;
 //    static u8 data[1];
     static u16 cnt_data = 0;
     u16 i = 0;
@@ -180,7 +183,15 @@ void TIM2_IRQHandler()
                 while((USART1->SR&0X40)==0);  
                 USART1->DR = DataScope_OutPut_Buffer[i]; //´Ó´®¿Ú¶ªÒ»¸ö×Ö½ÚÊý¾Ý³öÈ¥      
             }
+
+            
         }
+		
+		if (cnt1++ > 500)
+		{
+			cnt1 = 0;
+			OLED_ShowNum(0, 32, Frequency1, 10, 12);
+		}
     }
     TIM_ClearITPendingBit( TIM2, TIM_IT_Update );
 }

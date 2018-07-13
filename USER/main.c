@@ -22,6 +22,7 @@
 #include "usart.h"
 #include "oled.h"
 #include "led.h"
+#include "test.h"
 
 /*Main---------------------------------------*/
 int main(void)
@@ -33,11 +34,13 @@ int main(void)
     /*TIM3_PWM≥ı ºªØ*/
     TIM5_Init( 100, 84 );
 
+    tim_init1();	
+
 
     USART1_Config( 115200 );
 
     OLED_Init();
-	TIM2_Init( 1000, 84 );
+    TIM2_Init( 1000, 84 );
 
     OLED_ShowString(0,0,"hello world!",12);
 

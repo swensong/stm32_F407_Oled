@@ -9,7 +9,7 @@
 
 #include "stm32f4xx.h"
 
-void time_init(void);
-void time_init1(void);	
-int Read_Encoder(u8 TIMX);
+//void time_init(void);
+void tim_init1(void);	
+//int Read_Encoder(u8 TIMX);
 #endif
