@@ -594,6 +594,21 @@
               <FileType>1</FileType>
               <FilePath>..\USER\usart.c</FilePath>
             </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\oled.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>DataScope_DP.C</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\DataScope_DP.C</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

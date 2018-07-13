@@ -20,37 +20,37 @@
 #include "stm32f4xx.h"
 #include "TIM.h"
 #include "usart.h"
+#include "oled.h"
+#include "led.h"
 
 /*Main---------------------------------------*/
 int main(void)
 {
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_2 );
 
+    LED_Init();
     /* 舵机控制初始化 */
-    TIM2_Init( 1000, 84 );
-	/*TIM3_PWM初始化*/
-    TIM5_Init( 10000, 84 );
-    TIM10_Init( 40000, 84 );
+    /*TIM3_PWM初始化*/
+    TIM5_Init( 100, 84 );
+
 
     USART1_Config( 115200 );
 
-	/*loop-------------------------------------*/
-    TIM_SetCompare1( TIM5, 1000);
-    TIM_SetCompare2( TIM5, 2000);
-    TIM_SetCompare3( TIM5, 3000);
-    TIM_SetCompare4( TIM5, 4000);
+    OLED_Init();
+	TIM2_Init( 1000, 84 );
 
-    TIM_SetCompare1( TIM10, 3000 );
-//    TIM_SetCompare1( TIM10, 5000 );
-//    TIM_SetCompare1( TIM10, 775 );
-//    TIM_SetCompare1( TIM10, 1025 );
+    OLED_ShowString(0,0,"hello world!",12);
 
-    USART1_Write_String( "hello world!\r\n", sizeof("hello world!\r\n") );
-    //actuator_control( LEFT, 125 );
-    //actuator_control( RIGHT, 125 );
-    //Motor_Control( BACK, 8000 );
-	Motor_Control( FORWARD, 2000 );
+    USART1_Write_String("hello world!\r\n", sizeof("hello world!\r\n"));
 
+	// 12的参数不能相等否则无法转动
+    BIN2 = 1;
+    BIN1 = 0;
+    STBY = 1;
+    AIN1 = 0;
+    AIN2 = 1;
+    TIM_SetCompare1( TIM5, 50);
+    TIM_SetCompare2( TIM5, 50);
 
     while (1)
     {
